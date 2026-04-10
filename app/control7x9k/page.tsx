@@ -221,12 +221,12 @@ export default function AdminPage() {
 
 function Card({ icon, title, value, onClick, color, glow }: any) {
   const colorMap: any = {
-    green: "bg-green-500/20 border-green-500/30",
-    blue: "bg-blue-500/20 border-blue-500/30",
-    yellow: "bg-yellow-400/20 border-yellow-400/30",
-    orange: "bg-orange-500/20 border-orange-500/30",
-    red: "bg-red-500/20 border-red-500/30",
-    pink: "bg-pink-500/20 border-pink-500/30",
+    green: "bg-green-500/15 border-green-500/40 text-green-100",
+    blue: "bg-blue-500/15 border-blue-500/40 text-blue-100",
+    yellow: "bg-yellow-400/15 border-yellow-400/40 text-yellow-100",
+    orange: "bg-orange-500/15 border-orange-500/40 text-orange-100",
+    red: "bg-red-500/15 border-red-500/40 text-red-100",
+    pink: "bg-pink-500/15 border-pink-500/40 text-pink-100",
   };
 
   const glowMap: any = {
