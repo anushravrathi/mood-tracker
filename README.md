@@ -1,36 +1,52 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 🎭 Live Mood Tracker
 
-## Getting Started
+A real-time mood tracking web app that lets you update and display your current mood instantly.
 
-First, run the development server:
+Built with modern full-stack tools and a clean, interactive UI.
+
+---
+
+## 🚀 Live Demo
+👉 https://your-vercel-link.vercel.app
+
+---
+
+## ✨ Features
+
+- ⚡ Real-time mood updates using Supabase
+- 🎯 Dynamic mood categories (Rock Bottom → GOD MODE)
+- 🔐 Hidden admin panel with password protection
+- 🎨 Modern UI with glassmorphism + glowing gradients
+- ⏱️ Live "last updated" timer
+- 📱 Fully responsive design
+
+---
+
+## 🧠 Mood System
+
+| Range | Status | Emoji |
+|------|--------|------|
+| 0–20 | Rock Bottom | 😭 |
+| 20–40 | Down Bad | 😔 |
+| 40–60 | Hanging In There | 😐 |
+| 60–90 | Chillin | 😎 |
+| 90–100 | GOD MODE | 🚀 |
+
+---
+
+## 🛠️ Tech Stack
+
+- **Frontend:** Next.js (App Router), React, Tailwind CSS  
+- **Backend:** Supabase (PostgreSQL + Realtime)  
+- **Auth (Admin):** Custom password protection  
+- **Deployment:** Vercel  
+
+---
+
+## ⚙️ Setup Locally
+
+### 1. Clone repo
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
-
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
-
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
-
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+git clone https://github.com/anushravrathi/mood-tracker.git
+cd mood-tracker
