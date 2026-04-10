@@ -1,13 +1,29 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 import { supabase } from "@/lib/supabase";
+import { Settings } from "lucide-react";
+import { useRouter } from "next/navigation";
 
-export default function MoodTracker() {
-  const [mood, setMood] = useState(62);
+export default function Home() {
+  const [mood, setMood] = useState(65);
   const [lastUpdated, setLastUpdated] = useState(new Date());
+  const [timeAgo, setTimeAgo] = useState("just now");
 
-  // 🎯 Fetch from DB
+  const router = useRouter();
+
+  // 🧠 Mood logic
+  const getMoodData = (value: number) => {
+    if (value < 20) return { label: "ROCK BOTTOM", emoji: "😭" };
+    if (value < 40) return { label: "DOWN BAD", emoji: "😔" };
+    if (value < 60) return { label: "HANGING IN THERE", emoji: "😐" };
+    if (value < 90) return { label: "CHILLIN", emoji: "😎" };
+    return { label: "GOD MODE", emoji: "🚀" };
+  };
+
+  const moodData = getMoodData(mood);
+
+  // 📡 Fetch initial
   const fetchMood = async () => {
     const { data } = await supabase.from("mood").select("*").single();
     if (data) {
@@ -19,16 +35,12 @@ export default function MoodTracker() {
   useEffect(() => {
     fetchMood();
 
-    // ⚡ Realtime
+    // ⚡ realtime
     const channel = supabase
       .channel("realtime:mood")
       .on(
         "postgres_changes",
-        {
-          event: "UPDATE",
-          schema: "public",
-          table: "mood",
-        },
+        { event: "UPDATE", schema: "public", table: "mood" },
         (payload) => {
           setMood(payload.new.score);
           setLastUpdated(new Date());
@@ -41,93 +53,82 @@ export default function MoodTracker() {
     };
   }, []);
 
-  // 🎨 Helpers
-  const getMoodLabel = (value: number) => {
-    if (value >= 80) return "GOD MODE";
-    if (value >= 60) return "CHILLIN";
-    if (value >= 40) return "HANGING IN THERE";
-    if (value >= 20) return "DOWN BAD";
-    return "ROCK BOTTOM";
-  };
+  // ⏱️ timer
+  useEffect(() => {
+    const interval = setInterval(() => {
+      const seconds = Math.floor(
+        (Date.now() - lastUpdated.getTime()) / 1000
+      );
 
-  const getEmoji = (value: number) => {
-    if (value >= 80) return "🚀";
-    if (value >= 60) return "😊";
-    if (value >= 40) return "😐";
-    if (value >= 20) return "😔";
-    return "😭";
-  };
+      if (seconds < 60) setTimeAgo(`${seconds}s ago`);
+      else if (seconds < 3600)
+        setTimeAgo(`${Math.floor(seconds / 60)}m ago`);
+      else setTimeAgo(`${Math.floor(seconds / 3600)}h ago`);
+    }, 1000);
 
-  const getTimeAgo = () => {
-    const seconds = Math.floor((Date.now() - lastUpdated.getTime()) / 1000);
-    if (seconds < 60) return `${seconds}s ago`;
-    const minutes = Math.floor(seconds / 60);
-    return `${minutes}m ago`;
-  };
-
-  const getColor = (value: number) => {
-    if (value <= 50) return `hsl(${(value / 50) * 60},100%,50%)`;
-    return `hsl(${60 + ((value - 50) / 50) * 60},100%,50%)`;
-  };
+    return () => clearInterval(interval);
+  }, [lastUpdated]);
 
   return (
-    <main className="min-h-screen bg-black text-white flex flex-col">
+    <main className="min-h-screen flex flex-col bg-black text-white">
 
       {/* Header */}
-      <div className="px-6 py-4 border-b border-white/10 flex justify-between">
-        <p className="pixel-font text-xs">how am i doing today?</p>
-        <span>⚙️</span>
+      <div className="flex justify-between px-6 py-4 border-b border-white/10">
+        <p className="pixel text-xs tracking-widest">
+          how am i doing today?
+        </p>
+
+        <button onClick={() => router.push("/control7x9k")}>
+          <Settings className="w-5 h-5 text-white/60 hover:text-white hover:rotate-90 transition" />
+        </button>
       </div>
 
       {/* Center */}
-      <div className="flex-1 flex flex-col items-center justify-center px-4 text-center">
+      <div className="flex-1 flex items-center justify-center">
+        <div className="w-full max-w-2xl text-center px-6">
 
-        <p className="pixel-font text-xs opacity-50 mb-10 tracking-widest">
-          ANUSHRAV . LIVE
-        </p>
+          <p className="pixel text-xs opacity-50 mb-10 tracking-widest">
+            ANUSHRAV . LIVE
+          </p>
 
-        {/* Emoji */}
-        <div className="text-[100px] mb-10 animate-pulse">
-          {getEmoji(mood)}
-        </div>
-
-        {/* Bar */}
-        <div className="w-full max-w-xl mb-8">
-          <div className="relative w-full h-14 bg-white/5 rounded-full overflow-hidden border border-white/10">
-
-            {/* Background gradient */}
-            <div className="absolute inset-0 opacity-20 bg-gradient-to-r from-red-500 via-yellow-400 to-green-500" />
-
-            {/* Fill */}
-            <div
-              className="absolute left-0 top-0 h-full transition-all duration-700"
-              style={{
-                width: `${mood}%`,
-                background: "linear-gradient(to right,#ef4444,#eab308,#22c55e)",
-                boxShadow: `0 0 40px ${getColor(mood)}`,
-              }}
-            />
+          {/* Emoji */}
+          <div className="text-[100px] mb-10 animate-pulse">
+            {moodData.emoji}
           </div>
+
+          {/* Bar */}
+          <div className="w-full mb-10">
+            <div className="relative h-14 rounded-full overflow-hidden bg-white/5 border border-white/10">
+
+              <div className="absolute inset-0 bg-gradient-to-r from-red-500 via-yellow-400 to-green-500 opacity-20 blur-sm" />
+
+              <div
+                className="h-full transition-all duration-700 shadow-[0_0_20px_rgba(255,255,255,0.3)]"
+                style={{
+                  width: `${mood}%`,
+                  background:
+                    "linear-gradient(to right,#ef4444,#eab308,#22c55e)",
+                }}
+              />
+            </div>
+          </div>
+
+          {/* % */}
+          <h1 className="text-6xl font-bold glow-text mb-3">
+            {mood}%
+          </h1>
+
+          {/* Label */}
+          <p className="pixel text-sm mb-2 tracking-widest">
+            {moodData.label}
+          </p>
+
+          {/* Time */}
+          <p className="text-xs opacity-40">
+            last updated {timeAgo}
+          </p>
+
         </div>
-
-        {/* % */}
-        <h1
-          className="text-6xl font-bold mb-2"
-          style={{ textShadow: `0 0 30px ${getColor(mood)}` }}
-        >
-          {mood}%
-        </h1>
-
-        {/* Label */}
-        <p className="pixel-font text-sm tracking-widest mb-2">
-          {getMoodLabel(mood)}
-        </p>
-
-        {/* Time */}
-        <p className="text-xs opacity-40">
-          last updated {getTimeAgo()}
-        </p>
-
       </div>
     </main>
   );
