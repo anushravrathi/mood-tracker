@@ -15,7 +15,7 @@ Built with modern full-stack tools and a clean, interactive UI.
 
 - ⚡ Real-time mood updates using Supabase
 - 🎯 Dynamic mood categories (Rock Bottom → GOD MODE)
-- 🔐 Hidden admin panel (`/control-7x9k`) with password protection
+- 🔐 Hidden admin panel (`/control7x9k`) with password protection
 - 🎨 Modern UI with glassmorphism + glowing gradients
 - ⏱️ Live "last updated" timer
 - 📱 Fully responsive design
